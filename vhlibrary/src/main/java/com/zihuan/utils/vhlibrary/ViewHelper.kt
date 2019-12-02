@@ -40,11 +40,22 @@ fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bott
     setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
 }
 
+/**
+ * 显示当前view
+ */
+fun <T : View> T.VShow() = apply { visibility = View.VISIBLE }
 
-//隐藏view
-fun <T : View> T.VDismiss(): T {
-    visibility = View.GONE
-    return this
+
+/**隐藏view**/
+fun <T : View> T.VInvisible() = apply { visibility = View.INVISIBLE }
+
+fun <T : View> T.VDismiss() = apply { visibility = View.GONE }
+
+fun VShow(vararg views: View): Array<View> {
+    views.forEach {
+        it.visibility = View.VISIBLE
+    }
+    return views as Array<View>
 }
 
 fun VDismiss(vararg views: View): Array<View> {
@@ -54,27 +65,15 @@ fun VDismiss(vararg views: View): Array<View> {
     return views as Array<View>
 }
 
-fun <T : View> T.VDismiss(term: () -> Boolean) = if (term()) VDismiss() else VShow()
-
-/**
- * 显示当前view
- */
-fun <T : View> T.VShow(): T {
-    visibility = View.VISIBLE
-    return this
-}
-
-fun VShow(vararg views: View): Array<View> {
-    views.forEach {
-        it.visibility = View.VISIBLE
-    }
-    return views as Array<View>
-}
-
 /***
  * 传入一段lambda表达式来判断是否显示当前view
  */
 fun <T : View> T.VShow(term: T.() -> Boolean) = if (term()) VShow() else VDismiss()
+
+fun <T : View> T.VInvisible(term: T.() -> Boolean) = if (term()) VShow() else VInvisible()
+
+fun <T : View> T.VDismiss(term: () -> Boolean) = if (term()) VDismiss() else VShow()
+
 
 fun Array<View>.indexOfShow(index: Int) {
     get(index).VShow()
