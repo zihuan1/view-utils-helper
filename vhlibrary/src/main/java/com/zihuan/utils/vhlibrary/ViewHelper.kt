@@ -105,3 +105,10 @@ fun View.VIsShow() = (visibility == View.VISIBLE)
 
 //当前状态是否隐藏
 fun View.VIsDismiss() = (visibility == View.GONE)
+
+/**TextView选择字体颜色**/
+fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
+    apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
+
+fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
+    apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
