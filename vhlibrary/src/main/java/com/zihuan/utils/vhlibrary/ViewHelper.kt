@@ -58,6 +58,13 @@ fun VShow(vararg views: View): Array<View> {
     return views as Array<View>
 }
 
+fun VInvisible(vararg views: View): Array<View> {
+    views.forEach {
+        it.visibility = View.INVISIBLE
+    }
+    return views as Array<View>
+}
+
 fun VDismiss(vararg views: View): Array<View> {
     views.forEach {
         it.visibility = View.GONE
