@@ -51,25 +51,16 @@ fun <T : View> T.VInvisible() = apply { visibility = View.INVISIBLE }
 
 fun <T : View> T.VDismiss() = apply { visibility = View.GONE }
 
-fun VShow(vararg views: View): Array<View> {
-    views.forEach {
-        it.visibility = View.VISIBLE
-    }
-    return views as Array<View>
-}
+fun VShow(vararg views: View) = views.ViewForEach { View.VISIBLE }
 
-fun VInvisible(vararg views: View): Array<View> {
-    views.forEach {
-        it.visibility = View.INVISIBLE
-    }
-    return views as Array<View>
-}
+fun VInvisible(vararg views: View) = views.ViewForEach { View.INVISIBLE }
 
-fun VDismiss(vararg views: View): Array<View> {
-    views.forEach {
-        it.visibility = View.GONE
+fun VDismiss(vararg views: View) = views.ViewForEach { View.GONE }
+
+fun Array<out View>.ViewForEach(action: () -> Int) = apply {
+    forEach {
+        it.visibility = action()
     }
-    return views as Array<View>
 }
 
 /***
@@ -82,32 +73,46 @@ fun <T : View> T.VInvisible(term: T.() -> Boolean) = if (term()) VShow() else VI
 fun <T : View> T.VDismiss(term: () -> Boolean) = if (term()) VDismiss() else VShow()
 
 
-fun Array<View>.indexOfShow(index: Int) {
+fun Array<out View>.indexOfShow(index: Int) {
     get(index).VShow()
 }
 
-fun Array<View>.indexOfDismiss(index: Int) {
+fun Array<out View>.indexOfInvisible(index: Int) {
+    get(index).VInvisible()
+}
+
+fun Array<out View>.indexOfDismiss(index: Int) {
     get(index).VDismiss()
 }
 
-fun Array<View>.firstShow() {
+fun Array<out View>.firstShow() {
     indexOfShow(0)
 }
 
-fun Array<View>.firstDismiss() {
+fun Array<out View>.firstInvisible() {
+    indexOfInvisible(0)
+}
+
+fun Array<out View>.firstDismiss() {
     indexOfDismiss(0)
 }
 
-fun Array<View>.lastShow() {
+fun Array<out View>.lastShow() {
     indexOfShow(lastIndex)
 }
 
-fun Array<View>.lastDismiss() {
+fun Array<out View>.lastInvisible() {
+    indexOfInvisible(lastIndex)
+}
+
+fun Array<out View>.lastDismiss() {
     indexOfDismiss(lastIndex)
 }
 
 //当前状态是否是显示
 fun View.VIsShow() = (visibility == View.VISIBLE)
+
+fun View.VIsInvisible() = (visibility == View.INVISIBLE)
 
 //当前状态是否隐藏
 fun View.VIsDismiss() = (visibility == View.GONE)
@@ -118,3 +123,21 @@ fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
 
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
     apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
+
+/**多个TextView颜色操作**/
+fun VTextViews(vararg textView: TextView) = textView
+
+/**
+ * @param specialColor 特殊的颜色
+ * @param generalColor 普通的颜色
+ */
+fun <T : TextView> Array<out T>.firstSpecial(specialColor: Int, generalColor: Int) =
+    indexOfSpecial(specialColor, generalColor, 0)
+
+fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int) =
+    indexOfSpecial(specialColor, generalColor, lastIndex)
+
+fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
+    forEachIndexed { index, textView ->
+        textView.VColor(specialColor, generalColor, position == index)
+    }
