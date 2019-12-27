@@ -124,6 +124,12 @@ fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
     apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
 
+fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: T.() -> Boolean) =
+    apply { background = context.resources.getDrawable(if (action()) color else color2) }
+
+fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: Boolean) =
+    apply { background = context.resources.getDrawable(if (action) color else color2) }
+
 /**多个TextView颜色操作**/
 fun VTextViews(vararg textView: TextView) = textView
 
@@ -137,7 +143,11 @@ fun <T : TextView> Array<out T>.firstSpecial(specialColor: Int, generalColor: In
 fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int) =
     indexOfSpecial(specialColor, generalColor, lastIndex)
 
-fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
+fun <T : TextView> Array<out T>.indexOfSpecial(
+    specialColor: Int,
+    generalColor: Int,
+    position: Int
+) =
     forEachIndexed { index, textView ->
         textView.VColor(specialColor, generalColor, position == index)
     }
