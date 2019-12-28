@@ -61,6 +61,10 @@ fun VShow(vararg views: View, action: () -> Boolean) = views.ViewForEach {
     if (action()) View.VISIBLE else View.GONE
 }
 
+fun VDismiss(vararg views: View, action: () -> Boolean) = VShow(*views) {
+    !action()
+}
+
 fun Array<out View>.ViewForEach(action: () -> Int) = apply {
     forEach {
         it.visibility = action()
