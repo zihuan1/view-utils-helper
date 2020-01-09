@@ -19,7 +19,7 @@ inline fun String.isNotEmptyExtend(action: String.() -> Unit) = apply {
  * 字符串为空扩展
  */
 inline fun String.isEmptyExtend(action: String.() -> Unit) = apply {
-    if (isEmpty()) {
+    if (isNullOrEmpty() || isBlank()) {
         action()
     }
 }
@@ -77,4 +77,4 @@ fun IntNotZero(vararg args: Int): Int {
 /**
  * 判断当前字符是否为空,如果为空返回0,否则返回自身
  */
-fun String.getNotEmptyNumber() = if (isNullOrBlank() || isNullOrEmpty()) "0" else this
+fun String.getNotEmptyNumber() = if (isNullOrEmpty() || isBlank()) "0" else this

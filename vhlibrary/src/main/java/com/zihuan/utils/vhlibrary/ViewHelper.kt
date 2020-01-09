@@ -3,6 +3,7 @@ package com.zihuan.utils.vhlibrary
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 
 /**
@@ -127,16 +128,16 @@ fun View.VIsDismiss() = (visibility == View.GONE)
 
 /**TextView选择字体颜色**/
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
-    apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
+        apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
 
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
-    apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
+        apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
 
 fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: T.() -> Boolean) =
-    apply { background = context.resources.getDrawable(if (action()) color else color2) }
+        apply { background = context.resources.getDrawable(if (action()) color else color2) }
 
 fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: Boolean) =
-    apply { background = context.resources.getDrawable(if (action) color else color2) }
+        apply { background = context.resources.getDrawable(if (action) color else color2) }
 
 /**多个TextView颜色操作**/
 fun VTextViews(vararg textView: TextView) = textView
@@ -146,16 +147,19 @@ fun VTextViews(vararg textView: TextView) = textView
  * @param generalColor 普通的颜色
  */
 fun <T : TextView> Array<out T>.firstSpecial(specialColor: Int, generalColor: Int) =
-    indexOfSpecial(specialColor, generalColor, 0)
+        indexOfSpecial(specialColor, generalColor, 0)
 
 fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int) =
-    indexOfSpecial(specialColor, generalColor, lastIndex)
+        indexOfSpecial(specialColor, generalColor, lastIndex)
 
-fun <T : TextView> Array<out T>.indexOfSpecial(
-    specialColor: Int,
-    generalColor: Int,
-    position: Int
-) =
-    forEachIndexed { index, textView ->
-        textView.VColor(specialColor, generalColor, position == index)
-    }
+fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
+        forEachIndexed { index, textView ->
+            textView.VColor(specialColor, generalColor, position == index)
+        }
+
+/**
+ * 根据条件选择图片
+ */
+fun <T : ImageView> T.VImageResource(resPositive: Int, resNegative: Int, action: () -> Boolean) = apply {
+    setImageResource(if (action()) resPositive else resNegative)
+}

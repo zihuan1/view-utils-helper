@@ -20,8 +20,15 @@ class MainActivity : AppCompatActivity() {
 //        VInvisible(tv_1, tv_2).lastShow()
 //        VShow(tv_1, tv_2).lastDismiss()
 //        VDismiss(tv_1, tv_2).lastShow()
-        VTextViews(tv_1, tv_2, tv_3).lastSpecial(R.color.colorAccent, R.color.colorPrimary)
-
+        VTextViews(tv_1, tv_2).lastSpecial(R.color.colorAccent, R.color.colorPrimary)
+        tv_2.setOnClickListener {
+            var a = tv_3.text.toString()
+            a.isEmptyExtend {
+                Log.e("输出1", "测试$a")
+                return@setOnClickListener
+            }
+            Log.e("输出2", "测试$a")
+        }
 //        var list = ArrayList<String>()
 //        (0..100).forEach {
 //            list.add("$it")
