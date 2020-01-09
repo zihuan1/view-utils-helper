@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 //        VShow(tv_1, tv_2).lastDismiss()
 //        VDismiss(tv_1, tv_2).lastShow()
         VTextViews(tv_1, tv_2).lastSpecial(R.color.colorAccent, R.color.colorPrimary)
+        iv_select.VImageResource(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { true }
+        iv_select2.VImageResource(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { false }
         tv_2.setOnClickListener {
             var a = tv_3.text.toString()
             a.isEmptyExtend {

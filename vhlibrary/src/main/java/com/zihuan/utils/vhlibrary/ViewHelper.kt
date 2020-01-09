@@ -160,6 +160,10 @@ fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: 
 /**
  * 根据条件选择图片
  */
-fun <T : ImageView> T.VImageResource(resPositive: Int, resNegative: Int, action: () -> Boolean) = apply {
-    setImageResource(if (action()) resPositive else resNegative)
-}
+fun <T : ImageView> T.VImageResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
+        apply {
+            setImageResource(if (action()) resPositive else resNegative)
+        }
+
+fun <T : TextView> T.VTextResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
+        if (action()) resPositive else resNegative
