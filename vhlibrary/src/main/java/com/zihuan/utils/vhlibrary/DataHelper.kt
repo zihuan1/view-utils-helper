@@ -43,6 +43,24 @@ inline fun Boolean.falseExtend(action: () -> Unit) = apply {
 }
 
 /**
+ * 是否是T对象,如果是的话返回自身,否则返回空
+ */
+inline fun <reified T> Any.instanceof(): T? {
+    return if (this is T) {
+        this
+    } else null
+}
+
+/**
+ * 三元运算
+ */
+inline fun <T> Boolean.threeUnary(any: T, any2: T): T {
+    return if (this) {
+        any
+    } else any2
+}
+
+/**
  * 当前数是否大于九
  */
 fun Int.lessThanNine() = this < 9
