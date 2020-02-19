@@ -63,7 +63,7 @@ inline fun <T> Boolean.threeUnary(any: T, any2: T): T {
 /**
  * 当前数是否大于九
  */
-fun Int.lessThanNine() = this < 9
+fun Int.lessThanNine() = this <= 9
 
 /**
  * 如果小于九在前面添0
