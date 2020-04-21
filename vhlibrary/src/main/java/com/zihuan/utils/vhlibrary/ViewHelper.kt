@@ -229,7 +229,7 @@ class VPackTextViewClass {
     fun checkedRes(position: Int): VPackTextViewClass {
         if (GeneralRes != 0 && SpecialRes != 0)
             arrText.forEachIndexed { index, textView ->
-                val res = if (index == position) GeneralRes else SpecialRes
+                val res = if (index != position) GeneralRes else SpecialRes
                 textView.setDrawablesBounds(res, textType)
             }
         return this
