@@ -96,3 +96,12 @@ fun IntNotZero(vararg args: Int): Int {
  * 判断当前字符是否为空,如果为空返回0,否则返回自身
  */
 fun String.getNotEmptyNumber() = if (isNullOrEmpty() || isBlank()) "0" else this
+
+/**
+ * 保留两位小数
+ */
+fun String.keepTwoDecimal(): String {
+    var number = getNotEmptyNumber()
+    number = String.format("%.2s", number)
+    return number
+}

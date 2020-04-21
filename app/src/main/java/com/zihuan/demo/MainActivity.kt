@@ -1,5 +1,6 @@
 package com.zihuan.demo
 
+import android.content.pm.VersionedPackage
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,21 @@ class MainActivity : AppCompatActivity() {
             }
             Log.e("输出2", "测试$a")
         }
+
+        val textClass = VTextViews(tvTest1, tvTest2, tvTest3).VPackTextView(
+            R.color.colorAccent, R.color.colorPrimary,
+            R.mipmap.ic_launcher, R.mipmap.ic_launcher_round, DrawableType.RIGHT
+        )
+        tvTest1.setOnClickListener {
+            textClass.checkedColorRes(0)
+        }
+        tvTest2.setOnClickListener {
+            textClass.checkedColorRes(1)
+        }
+        tvTest3.setOnClickListener {
+            textClass.checkedColorRes(2)
+        }
+
 //        var list = ArrayList<String>()
 //        (0..100).forEach {
 //            list.add("$it")
@@ -54,6 +70,11 @@ class MainActivity : AppCompatActivity() {
 //            it.isAccessible = true
 //            var a = it.get("mList")
 //        }
+
+        val decimal = "0.012345".keepTwoDecimal()
+        Log.e("小数", decimal)
+        Log.e("小数2", String.format("%.2f", (0.123456f)))
+        Log.e("小数3", String.format("%.2f", (0.123456)))
     }
 
     fun getFiledsInfo(className: String): List<Field> {
@@ -76,4 +97,5 @@ class MainActivity : AppCompatActivity() {
         }
         return list
     }
+
 }

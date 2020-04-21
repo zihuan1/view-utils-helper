@@ -37,9 +37,6 @@ fun viewAlphaChange(scrollY: Int, height: Int): Int {
     }
 }
 
-fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bottom: Int = 0) {
-    setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
-}
 
 /**
  * 显示当前view
@@ -128,42 +125,146 @@ fun View.VIsDismiss() = (visibility == View.GONE)
 
 /**TextView选择字体颜色**/
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
-        apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
+    apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
 
 fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
-        apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
+    apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
 
 fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: T.() -> Boolean) =
-        apply { background = context.resources.getDrawable(if (action()) color else color2) }
+    apply { background = context.resources.getDrawable(if (action()) color else color2) }
 
 fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: Boolean) =
-        apply { background = context.resources.getDrawable(if (action) color else color2) }
+    apply { background = context.resources.getDrawable(if (action) color else color2) }
+
 
 /**多个TextView颜色操作**/
 fun VTextViews(vararg textView: TextView) = textView
+
+/**TextView设置DrawablesBound**/
+fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bottom: Int = 0) {
+    setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
+}
+
+enum class DrawableType {
+   NORMAL, LEFT, TOP, RIGHT, BOTTOM
+}
+
+fun TextView.setDrawablesBounds(res: Int, type: DrawableType) {
+    var left = if (DrawableType.LEFT == type) res else 0
+    var top = if (DrawableType.TOP == type) res else 0
+    var right = if (DrawableType.RIGHT == type) res else 0
+    var bottom = if (DrawableType.BOTTOM == type) res else 0
+    setDrawablesBounds(left, top, right, bottom)
+}
 
 /**
  * @param specialColor 特殊的颜色
  * @param generalColor 普通的颜色
  */
 fun <T : TextView> Array<out T>.firstSpecial(specialColor: Int, generalColor: Int) =
+    apply {
         indexOfSpecial(specialColor, generalColor, 0)
+    }
 
 fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int) =
+    apply {
         indexOfSpecial(specialColor, generalColor, lastIndex)
+    }
 
-fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
+fun <T : TextView> Array<out T>.indexOfSpecial(
+    specialColor: Int,
+    generalColor: Int,
+    position: Int
+) =
+    apply {
         forEachIndexed { index, textView ->
             textView.VColor(specialColor, generalColor, position == index)
         }
+    }
+
+
+class VPackTextViewClass {
+
+    private var SpecialColor = 0
+    private var GeneralColor = 0
+    private var SpecialRes = 0
+    private var GeneralRes = 0
+    private var textType=DrawableType.NORMAL
+    private var arr: Array<out TextView>
+
+    constructor(
+        SpecialColor: Int,
+        GeneralColor: Int,
+        SpecialRes: Int,
+        GeneralRes: Int,
+        textType: DrawableType,
+        arr: Array<out TextView>
+    ) {
+        this.SpecialColor = SpecialColor
+        this.GeneralColor = GeneralColor
+        this.SpecialRes = SpecialRes
+        this.GeneralRes = GeneralRes
+        this.textType = textType
+        this.arr = arr
+    }
+
+    constructor(SpecialColor: Int, GeneralColor: Int, arr: Array<out TextView>) {
+        this.SpecialColor = SpecialColor
+        this.GeneralColor = GeneralColor
+        this.arr = arr
+    }
+
+    fun checkedColor(position: Int): VPackTextViewClass {
+        if (SpecialColor != 0 && GeneralColor != 0)
+            arr.indexOfSpecial(SpecialColor, GeneralColor, position)
+        return this
+    }
+
+    fun checkedRes(position: Int): VPackTextViewClass {
+        if (GeneralRes != 0 && SpecialRes != 0)
+            arr.forEachIndexed { index, textView ->
+                val res = if (index == position) GeneralRes else SpecialRes
+                textView.setDrawablesBounds(res, textType)
+            }
+        return this
+    }
+
+    fun checkedColorRes(position: Int): VPackTextViewClass {
+        checkedColor(position)
+        checkedRes(position)
+        return this
+    }
+}
+
+/**
+ * 包装多个TextView的Color和Drawable,并改变当前选中的View状态
+ */
+fun <T : TextView> Array<out T>.VPackTextView(
+    specialColor: Int,
+    generalColor: Int,
+    specialRes: Int,
+    generalRes: Int,
+    drawableType: DrawableType
+) =
+    VPackTextViewClass(specialColor, generalColor, specialRes, generalRes, drawableType, this)
+
+/**
+ * 包装多个TextView的Color,并改变当前选中的TextView状态
+ */
+fun <T : TextView> Array<out T>.VPackTextView(
+    specialColor: Int,
+    generalColor: Int
+) =
+    VPackTextViewClass(specialColor, generalColor,  this)
+
 
 /**
  * 根据条件选择图片
  */
 fun <T : ImageView> T.VImageResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
-        apply {
-            setImageResource(if (action()) resPositive else resNegative)
-        }
+    apply {
+        setImageResource(if (action()) resPositive else resNegative)
+    }
 
 fun <T : TextView> T.VTextResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
-        if (action()) resPositive else resNegative
+    if (action()) resPositive else resNegative
