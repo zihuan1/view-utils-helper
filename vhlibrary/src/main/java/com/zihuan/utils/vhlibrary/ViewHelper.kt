@@ -146,7 +146,7 @@ fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bott
 }
 
 enum class DrawableType {
-   NORMAL, LEFT, TOP, RIGHT, BOTTOM
+    NORMAL, LEFT, TOP, RIGHT, BOTTOM
 }
 
 fun TextView.setDrawablesBounds(res: Int, type: DrawableType) {
@@ -189,8 +189,8 @@ class VPackTextViewClass {
     private var GeneralColor = 0
     private var SpecialRes = 0
     private var GeneralRes = 0
-    private var textType=DrawableType.NORMAL
-    private var arr: Array<out TextView>
+    private var textType = DrawableType.NORMAL
+    private var arrText: Array<out TextView>
 
     constructor(
         SpecialColor: Int,
@@ -205,34 +205,50 @@ class VPackTextViewClass {
         this.SpecialRes = SpecialRes
         this.GeneralRes = GeneralRes
         this.textType = textType
-        this.arr = arr
+        this.arrText = arr
     }
 
     constructor(SpecialColor: Int, GeneralColor: Int, arr: Array<out TextView>) {
         this.SpecialColor = SpecialColor
         this.GeneralColor = GeneralColor
-        this.arr = arr
+        this.arrText = arr
     }
 
+    /**
+     * 选中指定View色值
+     */
     fun checkedColor(position: Int): VPackTextViewClass {
         if (SpecialColor != 0 && GeneralColor != 0)
-            arr.indexOfSpecial(SpecialColor, GeneralColor, position)
+            arrText.indexOfSpecial(SpecialColor, GeneralColor, position)
         return this
     }
 
+    /**
+     * 选中指定View的Drawable
+     */
     fun checkedRes(position: Int): VPackTextViewClass {
         if (GeneralRes != 0 && SpecialRes != 0)
-            arr.forEachIndexed { index, textView ->
+            arrText.forEachIndexed { index, textView ->
                 val res = if (index == position) GeneralRes else SpecialRes
                 textView.setDrawablesBounds(res, textType)
             }
         return this
     }
 
+    /**
+     * 同时选定color与drawable
+     */
     fun checkedColorRes(position: Int): VPackTextViewClass {
         checkedColor(position)
         checkedRes(position)
         return this
+    }
+
+    /**
+     * 获取TextView集合
+     */
+    fun getTextViews(): Array<out TextView> {
+        return arrText
     }
 }
 
@@ -255,7 +271,7 @@ fun <T : TextView> Array<out T>.VPackTextView(
     specialColor: Int,
     generalColor: Int
 ) =
-    VPackTextViewClass(specialColor, generalColor,  this)
+    VPackTextViewClass(specialColor, generalColor, this)
 
 
 /**
