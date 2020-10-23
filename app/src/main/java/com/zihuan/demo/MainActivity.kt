@@ -1,6 +1,5 @@
 package com.zihuan.demo
 
-import android.content.pm.VersionedPackage
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,14 +21,17 @@ class MainActivity : AppCompatActivity() {
 //        VShow(tv_1, tv_2).lastDismiss()
 //        VDismiss(tv_1, tv_2).lastShow()
         VTextViews(tv_1, tv_2).lastSpecial(R.color.colorAccent, R.color.colorPrimary)
-        iv_select.VImageResource(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { true }
-        iv_select2.VImageResource(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { false }
+//        iv_select.imageSelector(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { true }
+        iv_select2.imageSelector(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) { false }
+        iv_select.imageSelectors(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round) {
+            return@imageSelectors it[0]
+        }
         tv_2.setOnClickListener {
             var a = tv_3.text.toString()
-            a.isEmptyExtend {
-                Log.e("输出1", "测试$a")
-                return@setOnClickListener
-            }
+//            a.isEmptyExtend {
+//                Log.e("输出1", "测试$a")
+//                return@setOnClickListener
+//            }
             Log.e("输出2", "测试$a")
         }
 
@@ -71,8 +73,8 @@ class MainActivity : AppCompatActivity() {
 //            var a = it.get("mList")
 //        }
 
-        val decimal = "0.012345".keepTwoDecimal()
-        Log.e("小数", decimal)
+//        val decimal = "0.012345".keepTwoDecimal()
+//        Log.e("小数", decimal)
         Log.e("小数2", String.format("%.2f", (0.123456f)))
         Log.e("小数3", String.format("%.2f", (0.123456)))
     }

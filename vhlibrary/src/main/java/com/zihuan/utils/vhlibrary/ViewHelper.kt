@@ -277,9 +277,14 @@ fun <T : TextView> Array<out T>.VPackTextView(
 /**
  * 根据条件选择图片
  */
-fun <T : ImageView> T.VImageResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
+fun <T : ImageView> T.imageSelector(resPositive: Int, resNegative: Int, action: () -> Boolean) =
     apply {
         setImageResource(if (action()) resPositive else resNegative)
+    }
+
+fun <T : ImageView> T.imageSelectors(vararg res: Int, action: (res: Array<Int>) -> Int) =
+    apply {
+        setImageResource(action(res.toTypedArray()))
     }
 
 fun <T : TextView> T.VTextResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
