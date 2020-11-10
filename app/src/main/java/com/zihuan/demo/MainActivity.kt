@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        tv_1.VShow()
+//        tv_1.VShow()
+        convert(tvTest1,tvTest2)
 //        tv_1.VInvisible()
         tv_1.VColor(R.color.colorAccent, R.color.colorPrimary, true)
 //        VInvisible(tv_1, tv_2).lastShow()
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
 //        Log.e("小数", decimal)
         Log.e("小数2", String.format("%.2f", (0.123456f)))
         Log.e("小数3", String.format("%.2f", (0.123456)))
+
     }
 
     fun getFiledsInfo(className: String): List<Field> {

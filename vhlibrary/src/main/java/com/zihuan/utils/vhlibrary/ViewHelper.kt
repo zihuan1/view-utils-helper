@@ -2,6 +2,7 @@ package com.zihuan.utils.vhlibrary
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -63,11 +64,23 @@ fun VDismiss(vararg views: View, action: () -> Boolean) = VShow(*views) {
     !action()
 }
 
+/**
+ * 将显示状态反转
+ */
+fun View.convert() {
+    convert(this)
+}
+
+fun convert(vararg views: View) {
+    views.forEach { it.VDismiss { it.VIsShow() } }
+}
+
 fun Array<out View>.ViewForEach(action: () -> Int) = apply {
     forEach {
         it.visibility = action()
     }
 }
+
 
 /***
  * 传入一段lambda表达式来判断是否显示当前view
@@ -289,3 +302,5 @@ fun <T : ImageView> T.imageSelectors(vararg res: Int, action: (res: Array<Int>) 
 
 fun <T : TextView> T.VTextResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
     if (action()) resPositive else resNegative
+
+ 
