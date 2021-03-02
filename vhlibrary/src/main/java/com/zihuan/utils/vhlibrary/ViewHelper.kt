@@ -17,7 +17,7 @@ import android.widget.TextView
 /**
  * 将图片转换成指定颜色
  */
-fun TransformImageColor(color: Int): PorterDuffColorFilter {
+fun transformImageColor(color: Int): PorterDuffColorFilter {
     return PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
 }
 
@@ -184,11 +184,7 @@ fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int
         indexOfSpecial(specialColor, generalColor, lastIndex)
     }
 
-fun <T : TextView> Array<out T>.indexOfSpecial(
-    specialColor: Int,
-    generalColor: Int,
-    position: Int
-) =
+fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
     apply {
         forEachIndexed { index, textView ->
             textView.VColor(specialColor, generalColor, position == index)
