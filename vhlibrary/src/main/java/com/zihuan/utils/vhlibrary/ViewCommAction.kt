@@ -58,6 +58,23 @@ fun View.clickFast(): Boolean {
     return false
 }
 
+//点击间隔
+private val DOUBLE_TIME: Long = 300
+
+//上次点击时间
+private var lastClickTime: Long = 0
+
+/**
+ * 是否是双击
+ */
+fun doubleClick(): Boolean {
+    var currentTimeMillis = System.currentTimeMillis()
+    if (currentTimeMillis - lastClickTime < DOUBLE_TIME && lastClickTime != 0L) {
+        return true
+    }
+    lastClickTime = currentTimeMillis
+    return false
+}
 
 fun View.objectAlpha(durations: Long = 1500): ObjectAnimator {
     return ObjectAnimator.ofFloat(this, "alpha", 1f, 0f)
