@@ -1,10 +1,7 @@
 package com.zihuan.utils.vhlibrary
 
 import android.animation.*
-import android.app.Activity
-import android.content.Context
 import android.view.View
-import androidx.fragment.app.Fragment
 
 
 /**
@@ -85,7 +82,7 @@ fun View.objectAlpha(durations: Long = 1500): ObjectAnimator {
         }
 }
 
-fun View.alphaShow(durations: Long = 500): ObjectAnimator {
+fun View.aShow(durations: Long = 500): ObjectAnimator {
     return ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
         .apply {
             VShow()
@@ -94,7 +91,7 @@ fun View.alphaShow(durations: Long = 500): ObjectAnimator {
         }
 }
 
-fun View.alphaDismiss(durations: Long = 500): ObjectAnimator {
+fun View.aDismiss(durations: Long = 500): ObjectAnimator {
     return ObjectAnimator.ofFloat(this, "alpha", 1f, 0f)
         .apply {
             addListener(object : AnimatorListenerAdapter() {
@@ -107,18 +104,18 @@ fun View.alphaDismiss(durations: Long = 500): ObjectAnimator {
         }
 }
 
-fun View.alphaShow(durations: Long = 500, action: () -> Boolean) {
+fun View.aShow(durations: Long = 500, action: () -> Boolean) {
     if (action()) {
-        alphaShow(durations)
+        aShow(durations)
     } else {
-        alphaDismiss(durations)
+        aDismiss(durations)
     }
 }
 
-fun View.alphaDismiss(durations: Long = 500, action: () -> Boolean) {
+fun View.aDismiss(durations: Long = 500, action: () -> Boolean) {
     if (action()) {
-        alphaDismiss(durations)
+        aDismiss(durations)
     } else {
-        alphaShow(durations)
+        aShow(durations)
     }
 }
