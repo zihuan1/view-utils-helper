@@ -21,7 +21,9 @@ fun View.onClickPro(action: () -> Unit) {
  */
 fun View.onClickScale(action: () -> Unit) {
     onClickPro {
-        action()
+        scale2(1f, 1.1f, 1f){
+            action()
+        }
     }
 }
 
