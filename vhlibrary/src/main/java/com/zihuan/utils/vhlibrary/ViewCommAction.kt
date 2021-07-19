@@ -1,6 +1,9 @@
 package com.zihuan.utils.vhlibrary
 
 import android.animation.*
+import android.app.Activity
+import android.os.Handler
+import android.os.Message
 import android.view.View
 
 
@@ -21,7 +24,15 @@ fun View.onClickPro(action: () -> Unit) {
  */
 fun View.onClickScale(action: () -> Unit) {
     onClickPro {
-        scale2(1f, 1.1f, 1f){
+        scale2(1f, 1.1f, 1f) {
+            action()
+        }
+    }
+}
+
+fun View.onClickScale2(action: () -> Unit) {
+    onClickPro {
+        scale2(1f, 1.02f, 1f) {
             action()
         }
     }
@@ -104,6 +115,27 @@ fun View.aDismiss(durations: Long = 500): ObjectAnimator {
             duration = durations
             start()
         }
+}
+
+private val handle = object : Handler() {
+    override fun handleMessage(msg: Message) {
+        when (msg.what) {
+            1 -> {
+                val view = msg.obj as View
+                (view.context as Activity).runOnUiThread {
+                    view.aDismiss(msg.arg1.toLong())
+                }
+            }
+        }
+    }
+}
+
+fun View.aDismissDelay(durations: Long = 500, delay: Long = 500) {
+    val msg = Message.obtain()
+    msg.what = 1
+    msg.arg1 = durations.toInt()
+    msg.obj = this
+    handle.sendEmptyMessageDelayed(1, delay)
 }
 
 fun View.aShow(durations: Long = 500, action: () -> Boolean) {
