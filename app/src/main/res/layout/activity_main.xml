@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent" />
+
     <TextView
         android:id="@+id/tv_1"
         android:layout_width="wrap_content"
@@ -52,7 +57,7 @@
         <TextView
             android:id="@+id/tvTest2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="34dp"
             android:layout_marginLeft="20dp"
             android:text="测试2" />
 
@@ -72,4 +77,70 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_1"
         android:visibility="gone" />
+
+
+    <ImageView
+        android:id="@+id/ivHeadTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/colorPrimaryDark"
+        android:src="@drawable/head_test" />
+
+
+    <ImageView
+        android:id="@+id/ivHeadTest2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHeadTest"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        tools:src="@mipmap/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/ivHeadTest3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/ivHeadTest2"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp" />
+
+    <com.zihuan.demo.TailorDimView
+        android:id="@+id/tailorDimView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        app:image_dst="@drawable/head_test"
+        app:image_src="@mipmap/test1"
+        app:trans="100" />
+    <!--    app:image_dst="@drawable/head_test"-->
+    <!--    app:image_src="@mipmap/test1"-->
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="5"
+        android:max="10"
+        android:layout_above="@+id/seekBar" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_above="@+id/tvTestColor" />
+
+    <TextView
+        android:id="@+id/tvTestColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="50dp"
+        android:text="测试随机色值" />
 </RelativeLayout>

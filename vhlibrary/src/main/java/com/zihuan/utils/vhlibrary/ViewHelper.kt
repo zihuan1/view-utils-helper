@@ -2,10 +2,8 @@ package com.zihuan.utils.vhlibrary
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 
 /**
  *
@@ -91,7 +89,28 @@ fun <T : View> T.VInvisible(term: T.() -> Boolean) = if (term()) VShow() else VI
 
 fun <T : View> T.VDismiss(term: () -> Boolean) = if (term()) VDismiss() else VShow()
 
+//当前状态是否是显示
+fun View.VIsShow() = (visibility == View.VISIBLE)
 
+fun View.VIsInvisible() = (visibility == View.INVISIBLE)
+
+//当前状态是否隐藏
+fun View.VIsDismiss() = (visibility == View.GONE)
+
+/**TextView选择字体颜色**/
+fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
+        apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
+
+fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
+        apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
+
+fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: T.() -> Boolean) =
+        apply { background = context.resources.getDrawable(if (action()) color else color2) }
+
+fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: Boolean) =
+        apply { background = context.resources.getDrawable(if (action) color else color2) }
+
+//
 fun Array<out View>.indexOfShow(index: Int) {
     get(index).VShow()
 }
@@ -128,46 +147,47 @@ fun Array<out View>.lastDismiss() {
     indexOfDismiss(lastIndex)
 }
 
-//当前状态是否是显示
-fun View.VIsShow() = (visibility == View.VISIBLE)
-
-fun View.VIsInvisible() = (visibility == View.INVISIBLE)
-
-//当前状态是否隐藏
-fun View.VIsDismiss() = (visibility == View.GONE)
-
-/**TextView选择字体颜色**/
-fun <T : TextView> T.VColor(color: Int, color2: Int, action: T.() -> Boolean) =
-    apply { setTextColor(context.resources.getColor(if (action()) color else color2)) }
-
-fun <T : TextView> T.VColor(color: Int, color2: Int, action: Boolean) =
-    apply { setTextColor(context.resources.getColor(if (action) color else color2)) }
-
-fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: T.() -> Boolean) =
-    apply { background = context.resources.getDrawable(if (action()) color else color2) }
-
-fun <T : View> T.VBackGroundColor(color: Int, color2: Int, action: Boolean) =
-    apply { background = context.resources.getDrawable(if (action) color else color2) }
-
 
 /**多个TextView颜色操作**/
 fun VTextViews(vararg textView: TextView) = textView
 
 /**TextView设置DrawablesBound**/
-fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bottom: Int = 0) {
-    setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
+fun TextView.setDrawablesBounds(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0): TextView {
+    setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
+    return this
 }
 
-enum class DrawableType {
-    NORMAL, LEFT, TOP, RIGHT, BOTTOM
-}
-
-fun TextView.setDrawablesBounds(res: Int, type: DrawableType) {
+fun TextView.setDrawablesBounds(res: Int, type: DrawableType): TextView {
     var left = if (DrawableType.LEFT == type) res else 0
     var top = if (DrawableType.TOP == type) res else 0
     var right = if (DrawableType.RIGHT == type) res else 0
     var bottom = if (DrawableType.BOTTOM == type) res else 0
     setDrawablesBounds(left, top, right, bottom)
+    return this
+}
+
+fun ProgressBar.setProgressDrawables(res: Int, res2: Int, action: () -> Boolean): ProgressBar {
+    val draw = if (action()) res else res2
+    progressDrawable = resources.getDrawable(draw)
+    return this
+}
+
+
+fun SeekBar.setProgressDrawables(res: Int, res2: Int, action: () -> Boolean): SeekBar {
+    val draw = if (action()) res else res2
+    progressDrawable = resources.getDrawable(draw)
+    return this
+}
+
+fun SeekBar.setThumb(res: Int, res2: Int, action: () -> Boolean): SeekBar {
+    val draw = if (action()) res else res2
+    thumb = resources.getDrawable(draw)
+    return this
+}
+
+
+enum class DrawableType {
+    NORMAL, LEFT, TOP, RIGHT, BOTTOM
 }
 
 /**
@@ -175,128 +195,56 @@ fun TextView.setDrawablesBounds(res: Int, type: DrawableType) {
  * @param generalColor 普通的颜色
  */
 fun <T : TextView> Array<out T>.firstSpecial(specialColor: Int, generalColor: Int) =
-    apply {
-        indexOfSpecial(specialColor, generalColor, 0)
-    }
+        apply {
+            indexOfSpecial(specialColor, generalColor, 0)
+        }
 
 fun <T : TextView> Array<out T>.lastSpecial(specialColor: Int, generalColor: Int) =
-    apply {
-        indexOfSpecial(specialColor, generalColor, lastIndex)
-    }
+        apply {
+            indexOfSpecial(specialColor, generalColor, lastIndex)
+        }
 
 fun <T : TextView> Array<out T>.indexOfSpecial(specialColor: Int, generalColor: Int, position: Int) =
-    apply {
-        forEachIndexed { index, textView ->
-            textView.VColor(specialColor, generalColor, position == index)
-        }
-    }
-
-
-class VPackTextViewClass {
-
-    private var SpecialColor = 0
-    private var GeneralColor = 0
-    private var SpecialRes = 0
-    private var GeneralRes = 0
-    private var textType = DrawableType.NORMAL
-    private var arrText: Array<out TextView>
-
-    constructor(
-        SpecialColor: Int,
-        GeneralColor: Int,
-        SpecialRes: Int,
-        GeneralRes: Int,
-        textType: DrawableType,
-        arr: Array<out TextView>
-    ) {
-        this.SpecialColor = SpecialColor
-        this.GeneralColor = GeneralColor
-        this.SpecialRes = SpecialRes
-        this.GeneralRes = GeneralRes
-        this.textType = textType
-        this.arrText = arr
-    }
-
-    constructor(SpecialColor: Int, GeneralColor: Int, arr: Array<out TextView>) {
-        this.SpecialColor = SpecialColor
-        this.GeneralColor = GeneralColor
-        this.arrText = arr
-    }
-
-    /**
-     * 选中指定View色值
-     */
-    fun checkedColor(position: Int): VPackTextViewClass {
-        if (SpecialColor != 0 && GeneralColor != 0)
-            arrText.indexOfSpecial(SpecialColor, GeneralColor, position)
-        return this
-    }
-
-    /**
-     * 选中指定View的Drawable
-     */
-    fun checkedRes(position: Int): VPackTextViewClass {
-        if (GeneralRes != 0 && SpecialRes != 0)
-            arrText.forEachIndexed { index, textView ->
-                val res = if (index != position) GeneralRes else SpecialRes
-                textView.setDrawablesBounds(res, textType)
+        apply {
+            forEachIndexed { index, textView ->
+                textView.VColor(specialColor, generalColor, position == index)
             }
-        return this
-    }
+        }
 
-    /**
-     * 同时选定color与drawable
-     */
-    fun checkedColorRes(position: Int): VPackTextViewClass {
-        checkedColor(position)
-        checkedRes(position)
-        return this
-    }
-
-    /**
-     * 获取TextView集合
-     */
-    fun getTextViews(): Array<out TextView> {
-        return arrText
-    }
-}
 
 /**
  * 包装多个TextView的Color和Drawable,并改变当前选中的View状态
  */
-fun <T : TextView> Array<out T>.VPackTextView(
-    specialColor: Int,
-    generalColor: Int,
-    specialRes: Int,
-    generalRes: Int,
-    drawableType: DrawableType
-) =
-    VPackTextViewClass(specialColor, generalColor, specialRes, generalRes, drawableType, this)
+fun <T : TextView> Array<out T>.packText(specialColor: Int, generalColor: Int, specialRes: Int, generalRes: Int, drawableType: DrawableType) =
+        PackTextView(specialColor, generalColor, specialRes, generalRes, drawableType, this)
 
 /**
  * 包装多个TextView的Color,并改变当前选中的TextView状态
  */
-fun <T : TextView> Array<out T>.VPackTextView(
-    specialColor: Int,
-    generalColor: Int
-) =
-    VPackTextViewClass(specialColor, generalColor, this)
+fun <T : TextView> Array<out T>.packText(specialColor: Int, generalColor: Int) =
+        PackTextView(specialColor, generalColor, this)
 
 
 /**
  * 根据条件选择图片
  */
 fun <T : ImageView> T.imageSelector(resPositive: Int, resNegative: Int, action: () -> Boolean) =
-    apply {
-        setImageResource(if (action()) resPositive else resNegative)
-    }
+        apply {
+            setImageResource(if (action()) resPositive else resNegative)
+        }
 
 fun <T : ImageView> T.imageSelectors(vararg res: Int, action: (res: Array<Int>) -> Int) =
-    apply {
-        setImageResource(action(res.toTypedArray()))
-    }
+        apply {
+            setImageResource(action(res.toTypedArray()))
+        }
+
+/**
+ * 光标移动到指定位置,默认为最后
+ */
+fun <T : EditText> T.selection(index: Int = this.text.length): T {
+    setSelection(index)
+    return this
+}
 
 fun <T : TextView> T.VTextResource(resPositive: Int, resNegative: Int, action: () -> Boolean) =
-    if (action()) resPositive else resNegative
-
- 
+        if (action()) resPositive else resNegative

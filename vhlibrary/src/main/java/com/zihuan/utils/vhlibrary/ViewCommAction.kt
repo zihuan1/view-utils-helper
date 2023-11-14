@@ -2,9 +2,14 @@ package com.zihuan.utils.vhlibrary
 
 import android.animation.*
 import android.app.Activity
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.TextView
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -151,5 +156,102 @@ fun View.aDismiss(durations: Long = 500, action: () -> Boolean) {
         aDismiss(durations)
     } else {
         aShow(durations)
+    }
+}
+
+fun ObjectAnimator.start2(): ObjectAnimator {
+    start()
+    return this
+}
+
+fun View.scaleShow(durations: Long = 300, action: (() -> Unit)? = null): ObjectAnimator {
+    val sx = PropertyValuesHolder.ofFloat("scaleX", 0f, 1f)
+    val sy = PropertyValuesHolder.ofFloat("scaleY", 0f, 1f)
+    val animator = ObjectAnimator.ofPropertyValuesHolder(this, sx, sy)
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
+            action?.let { it() }
+        }
+    })
+
+    animator.duration = durations
+    return animator.start2()
+}
+
+fun View.scaleDismiss(durations: Long = 300, action: (() -> Unit)? = null): ObjectAnimator {
+    val sx = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f)
+    val sy = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f)
+    val animator = ObjectAnimator.ofPropertyValuesHolder(this, sx, sy)
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator, isReverse: Boolean) {
+            action?.let { it() }
+        }
+    })
+    animator.duration = durations
+    return animator.start2()
+}
+
+/**
+ * 色值过度变化
+ */
+fun <T : View> T.colorAnimator(from: Int, to: Int, action: (Int) -> Unit): T {
+    val anim = ValueAnimator.ofArgb(from, to)
+    anim.addUpdateListener {
+        action(it.animatedValue.toString().toInt())
+    }
+    anim.start()
+    return this
+}
+
+
+fun TextView.color(from: Int = currentTextColor, to: Int): TextView {
+    colorAnimator(from, to) { setTextColor(it) }
+    return this
+}
+
+/**
+ * 更改drawable色值
+ */
+fun Context.drawTint(res: Int, color: Int): Drawable {
+    val drawable = resources.getDrawable(res)
+    drawable.setTint(color)
+    return drawable
+}
+
+fun View.drawTint(res: Int, color: Int): Drawable {
+    return context.drawTint(res, color)
+}
+
+private val colorList = arrayListOf(
+    android.R.color.holo_red_dark,
+    android.R.color.background_dark,
+    android.R.color.holo_blue_dark,
+    android.R.color.white,
+    android.R.color.holo_orange_dark,
+    android.R.color.holo_orange_light,
+    android.R.color.darker_gray,
+    android.R.color.holo_green_dark,
+    android.R.color.holo_purple,
+    android.R.color.holo_blue_bright
+)
+
+fun randomColor(color: ArrayList<Int>? = null): Int {
+    val color = color ?: colorList
+    val min = 0
+    val max = color.size - 1
+    val rand = Random()
+    val random = min + rand.nextInt(max - min + 1)
+    return color[random]
+}
+
+fun randomColor(color: ArrayList<Int>? = colorList, action: (Int, Int) -> Unit) {
+    color?.forEachIndexed { index, _ ->
+        action(index, randomColor(color))
+    }
+}
+
+fun testColor(color: ArrayList<Int>? = colorList, action: (Int, Int) -> Unit) {
+    color?.forEachIndexed { index, color ->
+        action(index, color)
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TailorDimView">
+        <!--被覆盖-->
+        <attr name="image_dst" format="reference"></attr>
+        <!--覆盖-->
+        <attr name="image_src" format="reference"></attr>
+        <!--透明度-->
+        <attr name="trans" format="integer"></attr>
+    </declare-styleable>
+</resources>
