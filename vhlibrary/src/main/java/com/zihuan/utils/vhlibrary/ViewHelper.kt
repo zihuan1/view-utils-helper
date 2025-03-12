@@ -2,6 +2,7 @@ package com.zihuan.utils.vhlibrary
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.view.Gravity.apply
 import android.view.View
 import android.widget.*
 

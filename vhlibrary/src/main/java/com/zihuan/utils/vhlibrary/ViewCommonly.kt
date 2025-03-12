@@ -1,44 +1,87 @@
 package com.zihuan.utils.vhlibrary
 
-import android.net.http.SslError
-import android.os.Build
-import android.webkit.SslErrorHandler
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.DrawableRes
 
 /**
- * View一般设置
+ * 在指定行数最后面添加省略号
+ * @param line 目标行数
+ * @param dotSpace 为省略号留出几个字符的空间,一般情况下一个字符足以盛下省略号
+ * 在recyclerView中使用会有问题,目前只能提前处理
  */
-fun WebView.commonly(): WebView {
-    val webSettings: WebSettings = settings
-    //设置自适应屏幕，两者合用
-    webSettings.useWideViewPort = true //将图片调整到适合webview的大小
-    webSettings.loadWithOverviewMode = true // 缩放至屏幕的大小
-//        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK //关闭webview中缓存
-    webSettings.allowFileAccess = true //设置可以访问文件
-    webSettings.javaScriptCanOpenWindowsAutomatically = true //支持通过JS打开新窗口
-    webSettings.loadsImagesAutomatically = true //支持自动加载图片
-    webSettings.defaultTextEncodingName = "utf-8" //设置编码格式
-    webSettings.javaScriptEnabled = true;
-    webSettings.cacheMode = WebSettings.LOAD_NO_CACHE;
-    webSettings.domStorageEnabled = true;
-    webSettings.databaseEnabled = true;
-    webSettings.setAppCacheEnabled(true);
-    webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS;
-    webSettings.useWideViewPort = true;
-    setBackgroundColor(0); // 设置背景色
-    scrollBarSize = 0
-//    background.alpha = 0; // 设置填充透明度 范围：0-255
-    background = resources.getDrawable(android.R.color.transparent)
-    webViewClient = object : WebViewClient() {
-        override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError?) {
-            // 不要使用super，否则有些手机访问不了，因为包含了一条 handler.cancel()
-            // super.onReceivedSslError(view, handler, error);
-            // 接受所有网站的证书，忽略SSL错误，执行访问网页
-            handler.proceed()
-        }
-    }
-    return this
+fun ellipsis(textView: TextView, line: Int, dotSpace: Int = 1): String {
+    if (textView.lineCount <= line) return textView.text.toString()
+    val lineEndIndex = textView.layout.getLineEnd(line) //目标行数
+    val cutText = "${textView.text.subSequence(0, lineEndIndex - dotSpace)}…"//1个字符可以盛下省略号
+    return cutText
 }
 
+fun TextView.ellipsis(line: Int) {
+    post {
+        text = ellipsis(this, line)
+    }
+}
+
+
+fun imageSelect(target: Int, @DrawableRes vararg arg: Int): Int {
+    arg.forEachIndexed { index, res ->
+        if (target == index) {
+            return res
+        }
+    }
+    return arg.first()
+}
+
+fun View.vMarginLeft(left: Int) {
+    vMargin(left = left)
+}
+
+fun View.vMarginTop(top: Int) {
+    vMargin(top = top)
+}
+
+fun View.vMarginRight(right: Int) {
+    vMargin(right = right)
+}
+
+fun View.vMarginBottom(bottom: Int) {
+    vMargin(bottom = bottom)
+}
+
+fun View.vMarginHorizontal(margin: Int) {
+    vMargin(left = margin, right = margin)
+}
+
+fun View.vMarginVertical(margin: Int) {
+    vMargin(top = margin, bottom = margin)
+}
+
+fun View.vMargin(left: Int = -1, top: Int = -1, right: Int = -1, bottom: Int = -1) {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    if (left != -1) {
+        params.leftMargin = left
+    }
+    if (top != -1) {
+        params.topMargin = top
+    }
+    if (right != -1) {
+        params.rightMargin = right
+    }
+    if (bottom != -1) {
+        params.bottomMargin = bottom
+    }
+    layoutParams = params
+}
+
+fun View.setMatchParent() {
+    setParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+}
+
+fun View.setParams(width: Int = ViewGroup.LayoutParams.WRAP_CONTENT, height: Int = ViewGroup.LayoutParams.WRAP_CONTENT) {
+    val params = layoutParams
+    params.width = width
+    params.height = height
+    layoutParams = params
+}

@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         seekBar.setProgressDrawables(R.drawable.bg_progress, R.drawable.bg_seekbar) { false }
         seekBar.setThumb(R.drawable.head_test, R.drawable.ic_psych_cb_3) { true }
         tvTestColor.setOnClickListener {
-            randomColor() { index, color ->
+            randomColor { index, color ->
                 Log.e("随机色值", "位置 $index   $color")
             }
             val color = randomColor()
