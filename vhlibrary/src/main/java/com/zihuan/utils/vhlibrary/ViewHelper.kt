@@ -153,7 +153,7 @@ fun VTextViews(vararg textView: TextView) = textView
 
 @Deprecated("用下面修复命名的方法")
 fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bottom: Int = 0) {
-    setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
+    setDrawableBounds(start, tip, end, bottom)
 }
 /**TextView设置DrawablesBound**/
 fun TextView.setDrawableBounds(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0): TextView {
