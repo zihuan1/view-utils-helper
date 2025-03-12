@@ -2,7 +2,6 @@ package com.zihuan.utils.vhlibrary
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.view.Gravity.apply
 import android.view.View
 import android.widget.*
 
@@ -152,8 +151,12 @@ fun Array<out View>.lastDismiss() {
 /**多个TextView颜色操作**/
 fun VTextViews(vararg textView: TextView) = textView
 
+@Deprecated("用下面修复命名的方法")
+fun TextView.setDrawablesBounds(start: Int = 0, tip: Int = 0, end: Int = 0, bottom: Int = 0) {
+    setCompoundDrawablesRelativeWithIntrinsicBounds(start, tip, end, bottom)
+}
 /**TextView设置DrawablesBound**/
-fun TextView.setDrawablesBounds(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0): TextView {
+fun TextView.setDrawableBounds(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0): TextView {
     setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom)
     return this
 }
@@ -163,7 +166,7 @@ fun TextView.setDrawablesBounds(res: Int, type: DrawableType): TextView {
     var top = if (DrawableType.TOP == type) res else 0
     var right = if (DrawableType.RIGHT == type) res else 0
     var bottom = if (DrawableType.BOTTOM == type) res else 0
-    setDrawablesBounds(left, top, right, bottom)
+    setDrawableBounds(left, top, right, bottom)
     return this
 }
 
